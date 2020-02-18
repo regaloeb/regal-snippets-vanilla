@@ -1,0 +1,94 @@
+/*
+ * Breakpoints
+ */
+$tablet-portrait: 1004px;
+$mobile-phone: 671px;
+$tablet-width: 769px;
+$desktop-width: 1024px;
+$large-width: 1281px;
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) and (max-width: #{$large-width - 1px}) {
+    @content;
+  }
+}
+@mixin large {
+  @media (min-width: #{$large-width}) {
+    @content;
+  }
+}
+@mixin desktop-to-large {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+@mixin tablet-to-large {
+  @media (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+@mixin tablet-portrait-to-large {
+  @media (min-width: #{$tablet-portrait}) {
+    @content;
+  }
+}
+
+/*
+ * Sections attributes
+ */
+$maxWidthSection: 1000px;
+$sectionPadding: 1rem;
+$maxWidth: 1200px;
+$headerHeight: 13rem;
+$headerHeightDesktop: 13rem;
+$headerHeightScrolled: 9rem;
+$headerHeightMobile: 11rem;
+$headerHeightMobileScrolled: 7rem;
+
+/*
+ * Durations
+ */
+$speed: 1s;
+$speed1: 0.6s;
+$speed2: 0.3s;
+$speed3: 0.15s;
+
+/*
+ * Colors
+ */
+$black: #333333;
+$white: #ffffff;
+$grey: #999999;
+$greyLight: #dddddd;
+$greyDark: #666666;
+$red: #ea212d;
+$blue: #1355D5;
+$blueLight: #4FB4B7;
+$blueDark: #0B112E;
+$green: #1F676F;
+$greenDark: #1b565c;
+$greenDarker: #17484d;
+$greenLighter: #F4F7FC;
+$greenLight: #6CC3C6;
+$brown: #733540;
+$brownDark: #673039;
+
+$colorText: $black;
+$colorLinks: blue;
+$btnBgColor: $red;
+$highlight: $red;
+
+$transpa-bg: rgba(0,0,0,0.65);
+
+/*
+ * Miscellaneous
+ */
+$borderRadiusBtn: .5rem;
+$defaultFontSize: 1.6rem;
+$defaultMobileFontSize: 1.4rem;
+$defaultEase: $easeInOutQuad;
