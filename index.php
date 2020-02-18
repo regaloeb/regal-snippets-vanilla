@@ -33,30 +33,35 @@
 				<h2>forEach NodeList et HTMLCollection</h2>
 				<p>
 					Pour de nombreux navigateurs, les éléments <strong>NodeList</strong> et <strong>HTMLCollection</strong> retournés par un <strong>document.querySelectorAll()</strong> n'héritent pas de la méthode <strong>forEach</strong>, c'est bien dommage.<br>
-					Pour boucler dans des <strong>NodeList</strong> et <strong>HTMLCollection</strong>, j'utilise un petit polyfill très simple&nbsp;:<br>
-					<div class="code">
+					Pour boucler dans des <strong>NodeList</strong> et <strong>HTMLCollection</strong>, j'utilise un petit polyfill très simple&nbsp;:
+				</p>
+				<div class="code">
 //forEach NodeList & HTMLCollection polyfill
 NodeList.prototype.forEach||(NodeList.prototype.forEach=Array.prototype.forEach),
 HTMLCollection.prototype.forEach||(HTMLCollection.prototype.forEach=Array.prototype.forEach);
-					</div>
+				</div>
+				<p>
 					C'est grace à ce polyfill que je peux facilement appliquer des Listeners et c'est la base&nbsp;:<br>
-					<div class="code">
+				</p>
+				<div class="code">
 document.querySelectorAll('.flickity-carousel').forEach(function(elt){
 &nbsp;&nbsp;&nbsp;&nbsp;elt.addEventListener('click', FUNCTION);
 }
-					</div>
-				</p>
+				</div>
 				
 				<h2>onAnimationEnd et onTransitionEnd</h2>
 				<p>
 					Pour détecter la fin d'une animation ou d'une transition CSS, chaque navigateur a sa propre méthode basée sur leurs préfixes (-webkit-, o, moz).<br>
-					Pour simplifier l'appel à ces événements, j'utilise la petite fonction suivante&nbsp;:<br>
-					<div class="code">
+					Pour simplifier l'appel à ces événements, j'utilise la petite fonction suivante&nbsp;:
+				</p>
+				<div class="code">
 //animation and transion end event
 function whichAnimationEvent(){var n,i=document.createElement("fakeelement"),t={animation:"animationend",OAnimation:"oAnimationEnd",MozAnimation:"animationend",WebkitAnimation:"webkitAnimationEnd"};for(n in t)if(void 0!==i.style[n])return t[n]}function whichTransitionEvent(){var n,i=document.createElement("fakeelement"),t={transition:"transitionend",OTransition:"oTransitionEnd",MozTransition:"transitionend",WebkitTransition:"webkitTransitionEnd"};for(n in t)if(void 0!==i.style[n])return t[n]}var animationEvent=whichAnimationEvent(),transitionEvent=whichTransitionEvent();
-					</div>
-					Pour détecter la fin d'une transition, une seule syntaxe commune&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Pour détecter la fin d'une transition, une seule syntaxe commune&nbsp;:
+				</p>
+				<div class="code">
 ELT.addEventListener(transitionEvent, step2);
 function step2(event) {
 &nbsp;&nbsp;&nbsp;&nbsp;if(event.propertyName == 'transform'){//<strong>Il vaut toujours mieux tester la propriété</strong>
@@ -64,39 +69,43 @@ function step2(event) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...ACTIONS...
 &nbsp;&nbsp;&nbsp;&nbsp;}
 };
-					</div>
-				</p>
+				</div>
 				
 				<h2>closest</h2>
 				<p>
 					Très pratique pour vérifier si un élément a bien un parent particulier.<br>
 					Mais IE11- et Edge 12 à 14 ne comprennent pas la syntaxe.<br>
-					Ce polyfill règle le problème&nbsp;:<br>
-					<div class="code">
+					Ce polyfill règle le problème&nbsp;:
+				</p>
+				<div class="code">
 Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector),Element.prototype.closest||(Element.prototype.closest=function(e){var t=this;if(!document.documentElement.contains(t))return null;do{if(t.matches(e))return t;t=t.parentElement||t.parentNode}while(null!==t&&1==t.nodeType);return null});
-					</div>
-					On peut ainsi par exemple appliquer un onclick sur le document et cibler uniquement un élément et ses enfants (ici .push-video)&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					On peut ainsi par exemple appliquer un onclick sur le document et cibler uniquement un élément et ses enfants (ici .push-video)&nbsp;:
+				</p>
+				<div class="code">
 document.addEventListener('click', function (e) {
 &nbsp;&nbsp;&nbsp;&nbsp;if (e.target.closest('.push-video')) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...ACTIONS...
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;//<strong>return pour arrêter le if</strong>
 &nbsp;&nbsp;&nbsp;&nbsp;}
 });
-					</div>
-					Ou encore retrouver un élément présent au-dessus de la target d'une action (ici la target est pushVideo et l'élément à retrouver un .accordion-desc&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Ou encore retrouver un élément présent au-dessus de la target d'une action (ici la target est pushVideo et l'élément à retrouver un .accordion-desc&nbsp;:
+				</p>
+				<div class="code">
 var elem = pushVideo.closest('.accordion-desc');
 setTimeout(function(){
 &nbsp;&nbsp;&nbsp;&nbsp;acc.slideDown(elem);
 }, 500);
-					</div>
-				</p>
+				</div>
 				
 				<h2>SlideUp et slideDown comme jQuery</h2>
 				<p>
-					Cette fonctionnalité jQuery très pratique pour les accordéons n'existe pas de base en Javascript Vanilla mais avec cette petite fonction, c'est un jeu d'enfant de l'implémenter&nbsp;:<br>
-					<div class="code">
+					Cette fonctionnalité jQuery très pratique pour les accordéons n'existe pas de base en Javascript Vanilla mais avec cette petite fonction, c'est un jeu d'enfant de l'implémenter&nbsp;:
+				</p>
+				<div class="code">
 function slideDown(elem) {
 &nbsp;&nbsp;&nbsp;&nbsp;var h = 0;
 &nbsp;&nbsp;&nbsp;&nbsp;elem.children.forEach(function(elt){
@@ -107,19 +116,21 @@ function slideDown(elem) {
 function slideUp(elem) {
 &nbsp;&nbsp;&nbsp;&nbsp;elem.style.maxHeight = '0';
 }
-					</div>
-					Il faut juste ajouter une transition à la propriété max-height des éléments à cibler.<br>
-					<div class="code">
+				</div>
+				<p>
+					Il faut juste ajouter une transition à la propriété max-height des éléments à cibler.
+				</p>
+				<div class="code">
 .element{
 &nbsp;&nbsp;&nbsp;&nbsp;transition: max-height $speed $ease;
 }	
-					</div>
-				</p>
+				</div>
 				
 				<h2>triggerevent</h2>
 				<p>
-					Pour déclencher l'action d'un élément. Cette fonction est fondamentale car elle est utilisée dans plusieurs autres snippets, dont les indispensables <strong>onResizeEnd</strong> et <strong>onScrollEnd</strong>&nbsp;:<br>
-					<div class="code">
+					Pour déclencher l'action d'un élément. Cette fonction est fondamentale car elle est utilisée dans plusieurs autres snippets, dont les indispensables <strong>onResizeEnd</strong> et <strong>onScrollEnd</strong>&nbsp;:
+				</p>
+				<div class="code">
 //triggerEvent
 function triggerEvent(el, type){
 &nbsp;&nbsp;&nbsp;&nbsp;if ('createEvent' in document) {
@@ -133,18 +144,20 @@ function triggerEvent(el, type){
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.fireEvent('on' + e.eventType, e);
 &nbsp;&nbsp;&nbsp;&nbsp;}
 }
-					</div>
-					Syntaxe d'appel au onclick d'un élément&nbsp;:<br>
-					<div class="code">
-triggerEvent(ELEMENT, 'click');	
-					</div>
+				</div>
+				<p>
+					Syntaxe d'appel au onclick d'un élément&nbsp;:
 				</p>
+				<div class="code">
+triggerEvent(ELEMENT, 'click');	
+				</div>
 				
 				<h2>scrollEnd</h2>
 				<p>
 					Dans certains cas, il n'est pas utile de surcharger la machine avec des appels en boucle tout au long du scroll de la page.<br>
-					L'événement onScrollEnd est là pour nous&nbsp;:<br>
-					<div class="code">
+					L'événement onScrollEnd est là pour nous&nbsp;:
+				</p>
+				<div class="code">
 //wait until scroll is done
 window.addEventListener('scroll', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;if(this.scrollTO) clearTimeout(this.scrollTO);
@@ -152,21 +165,22 @@ window.addEventListener('scroll', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;triggerEvent(this, 'scrollEnd');
 &nbsp;&nbsp;&nbsp;&nbsp;}, 500);
 }, false);
-
-					</div>
-					Syntaxe d'appel au scrollEnd&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Syntaxe d'appel au scrollEnd&nbsp;:
+				</p>
+				<div class="code">
 window.addEventListener('scrollEnd', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;console.log("scrollEnd");
 });	
-					</div>
-				</p>
+				</div>
 				
 				<h2>resizeEnd</h2>
 				<p>
 					Un des éléments indispensable au responsive design, c'est le onResize de la fenêtre.<br>
 					Il est rarement nécessaire de déclencher des événements tout au long du resize, il vaut mieux attendre la fin du resize&nbsp;:
-					<div class="code">
+				</p>
+				<div class="code">
 //wait until resize is done
 window.addEventListener('resize', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;if(this.resizeTO) clearTimeout(this.resizeTO);
@@ -174,20 +188,22 @@ window.addEventListener('resize', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;triggerEvent(this, 'resizeEnd');
 &nbsp;&nbsp;&nbsp;&nbsp;}, 500);
 });
-					</div>
-					Syntaxe d'appel au resizeEnd&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Syntaxe d'appel au resizeEnd&nbsp;:
+				</p>
+				<div class="code">
 window.addEventListener('resizeEnd', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;//console.log("resizeEnd");
 });
-					</div>
-				</p>
+				</div>
 				
 				<h2>objectfit</h2>
 				<p>
 					La propriété CSS object-fit permet de forcer une image à remplir son conteneur, comme une image de background. C'est très pratique pour le responsive mais IE11&lt; et Edge 12-15 ne le comprennent pas.<br>
 					Pas de panique! avec cette petite fonction, tout rentre dans l'ordre pour ces récalcitrants&nbsp;:
-					<div class="code">
+				</p>
+				<div class="code">
 function objectFit(){
 &nbsp;&nbsp;&nbsp;&nbsp;if('objectFit' in document.documentElement.style === false) {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var liste = document.querySelectorAll('.js-object-fit');
@@ -204,22 +220,26 @@ function objectFit(){
 &nbsp;&nbsp;&nbsp;&nbsp;}
 };
 objectFit();
-					</div>
-					Il faut juste appliquer la classe <strong>js-object-fit</strong> aux blocs et rajouter la classe <strong>.compat-object-fit</strong> à sa CSS&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Il faut juste appliquer la classe <strong>js-object-fit</strong> aux blocs et rajouter la classe <strong>.compat-object-fit</strong> à sa CSS&nbsp;:
+				</p>
+				<div class="code">
 .compat-object-fit{
 &nbsp;&nbsp;&nbsp;&nbsp;img{
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity: 0;
 &nbsp;&nbsp;&nbsp;&nbsp;}
 }
-					</div>
+				</div>
+				<p>
 					Il faut aussi penser à appeler la fonction <strong>objectFit();</strong> lorsqu'on charge du contenu dynamiquement via AJAX.
 				</p>
 				
 				<h2>AJAX</h2>
 				<p>
-					Pour éviter d'avoir à ré-écrire à chaque fois les appels AJAX, j'ai fait cette petite fonction facile à utiliser&nbsp;:<br>
-					<div class="code">
+					Pour éviter d'avoir à ré-écrire à chaque fois les appels AJAX, j'ai fait cette petite fonction facile à utiliser&nbsp;:
+				</p>
+				<div class="code">
 //ajaxCall
 function ajaxCall(url, params, method, callback){
 &nbsp;&nbsp;&nbsp;&nbsp;var xhr = new XMLHttpRequest();
@@ -241,9 +261,11 @@ function ajaxCall(url, params, method, callback){
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
 &nbsp;&nbsp;&nbsp;&nbsp;};
 }
-					</div>
-					Appel à la fonction, ici avec un retour JSON&nbsp;:<br>
-					<div class="code">
+				</div>
+				<p>
+					Appel à la fonction, ici avec un retour JSON&nbsp;:
+				</p>
+				<div class="code">
 function callbackWelcomeBanner(data){
 &nbsp;&nbsp;&nbsp;&nbsp;var json = JSON.parse(data);
 &nbsp;&nbsp;&nbsp;&nbsp;var arr = json.welcome;
@@ -254,27 +276,29 @@ function callbackWelcomeBanner(data){
 &nbsp;&nbsp;&nbsp;&nbsp;objectFit();
 }
 ajaxCall('json/welcome-banner.txt', '', 'get', callbackWelcomeBanner);
-					</div>
-				</p>
+				</div>
 				
 				<h2>IE9 et inférieurs</h2>
 				<p>
 					Si on veut cibler ces vieux navigateurs qui ne comprennent ni <strong>classList</strong> ni <strong>RequestAnimationFrame</strong>,
-					ces polyfills sont là pour nous aider&nbsp;:<br>
-					<div class="code">
+					ces polyfills sont là pour nous aider&nbsp;:
+				</p>
+				<div class="code">
 //classList polyfill /for IE9-)
 !function(){function t(t){this.el=t;for(var n=t.className.replace(/^\s+|\s+$/g,"").split(/\s+/),i=0;i&lt;n.length;i++)e.call(this,n[i])}function n(t,n,i){Object.defineProperty?Object.defineProperty(t,n,{get:i}):t.__defineGetter__(n,i)}if(!("undefined"==typeof window.Element||"classList"in document.documentElement)){var i=Array.prototype,e=i.push,s=i.splice,o=i.join;t.prototype={add:function(t){this.contains(t)||(e.call(this,t),this.el.className=this.toString())},contains:function(t){return-1!=this.el.className.indexOf(t)},item:function(t){return this[t]||null},remove:function(t){if(this.contains(t)){for(var n=0;n&lt;this.length&&this[n]!=t;n++);s.call(this,n,1),this.el.className=this.toString()}},toString:function(){return o.call(this," ")},toggle:function(t){return this.contains(t)?this.remove(t):this.add(t),this.contains(t)}},window.DOMTokenList=t,n(Element.prototype,"classList",function(){return new t(this)})}}();
 
 //RequestAnimationFrame Polyfill
 !function(){for(var n=0,i=["ms","moz","webkit","o"],e=0;e&lt;i.length&&!window.requestAnimationFrame;++e)window.requestAnimationFrame=window[i[e]+"RequestAnimationFrame"],window.cancelAnimationFrame=window[i[e]+"CancelAnimationFrame"]||window[i[e]+"CancelRequestAnimationFrame"];window.requestAnimationFrame||(window.requestAnimationFrame=function(i){var e=(new Date).getTime(),a=Math.max(0,16-(e-n)),o=window.setTimeout(function(){i(e+a)},a);return n=e+a,o}),window.cancelAnimationFrame||(window.cancelAnimationFrame=function(n){clearTimeout(n)})}();
-					</div>
-					On peut ainsi utiliser classList et RequestAnimationFrame avec la syntaxe standard.
+				</div>
+				<p>
+					On peut ainsi utiliser classList et RequestAnimationFrame en toute quiétude.
 				</p>
 				<h2>Variables utiles pour responsive</h2>
 				<p>
 					Un des éléments indispensable au responsive design, c'est le onResize de la fenêtre.<br>
-					Il est rarement nécessaire de déclencher des événements tout au long du resize, il vaut mieux attendre la fin du resize&nbsp;:<br>
-					<div class="code">
+					Il est rarement nécessaire de déclencher des événements tout au long du resize, il vaut mieux attendre la fin du resize&nbsp;:
+				</p>
+				<div class="code">
 var w = window,
 &nbsp;&nbsp;&nbsp;&nbsp;d = document,
 &nbsp;&nbsp;&nbsp;&nbsp;e = d.documentElement,
@@ -290,20 +314,19 @@ window.addEventListener('resizeEnd', function() {
 &nbsp;&nbsp;&nbsp;&nbsp;windowWidth = w.innerWidth||e.clientWidth||g.clientWidth;
 &nbsp;&nbsp;&nbsp;&nbsp;isMobileContext = (windowWidth > mobileLimit) ? false : true;
 });
-					</div>
-				</p>
+				</div>
 				
 				<h2>Browsers sniffing</h2>
 				<p>
-					Oui, je sais, c'est mal... Mais c'est parfois la seule solution pour résoudre un problème spécifique à Safari, MacIntosh ou Edge (et c'est pas comme si c'était si rare&nbsp;!).<br>
-					<div class="code">
+					Oui, je sais, c'est mal... Mais c'est parfois la seule solution pour résoudre un problème spécifique à Safari, MacIntosh ou Edge (et c'est pas comme si c'était si rare&nbsp;!).
+				</p>
+				<div class="code">
 //browsers detection
 var isiPad = navigator.userAgent.match(/iPad/i) != null;
 var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
 var isMac = navigator.platform.indexOf('Mac') > -1;
 var isIEorEDGE = navigator.appName == 'Microsoft Internet Explorer' || (navigator.appName == "Netscape" && navigator.appVersion.indexOf('Edge') > -1);
-					</div>
-				</p>
+				</div>
 				
 				<h2>Tout en un</h2>
 				<p>
