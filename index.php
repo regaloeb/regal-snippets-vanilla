@@ -278,9 +278,9 @@ function callbackWelcomeBanner(data){
 ajaxCall('json/welcome-banner.txt', '', 'get', callbackWelcomeBanner);
 				</div>
 				
-				<h2>IE9 et inférieurs</h2>
+				<h2>classList et RequestAnimationFrame</h2>
 				<p>
-					Si on veut cibler ces vieux navigateurs qui ne comprennent ni <strong>classList</strong> ni <strong>RequestAnimationFrame</strong>,
+					Si on veut cibler les vieux navigateurs IE9 et inférieurs qui ne comprennent ni <strong>classList</strong> ni <strong>RequestAnimationFrame</strong>,
 					ces polyfills sont là pour nous aider&nbsp;:
 				</p>
 				<div class="code">
